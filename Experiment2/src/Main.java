@@ -37,5 +37,7 @@ public class Main
 
         System.out.println(inputFilePath);
         System.out.println(outputFilePath);
+
+        Packet_Formatting packet = new Packet_Formatting();
     }
 }
