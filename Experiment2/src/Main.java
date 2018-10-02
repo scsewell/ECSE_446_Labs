@@ -6,7 +6,7 @@ public class Main
     {
         Options options = new Options();
 
-        Option input = new Option("i", "input", true, "input file path");
+        Option input = new Option("t", "timeout", true, "How long to wait, in seconds, before retransmitting an unanswered query. Default value is 5.");
         input.setRequired(true);
         options.addOption(input);
 
