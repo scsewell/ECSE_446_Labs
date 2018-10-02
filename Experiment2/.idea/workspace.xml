@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8a98c8-ac6f-4247-b775-901974099f17" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiment2.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/CONTRIBUTING.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/LICENSE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/NOTICE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/RELEASE-NOTES.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/commons-cli-1.4-javadoc.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/commons-cli-1.4-sources.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/commons-cli-1.4-test-sources.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/commons-cli-1.4-tests.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dependancies/commons-cli-1.4.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -51,8 +59,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" lean-forward="true" selection-end-line="9" />
+            <state relative-caret-position="40">
+              <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -102,7 +110,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538505436855" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1538505591504" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
@@ -191,8 +199,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-end-line="9" />
+        <state relative-caret-position="40">
+          <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
         </state>
       </provider>
     </entry>
