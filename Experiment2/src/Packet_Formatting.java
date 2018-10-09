@@ -17,9 +17,6 @@ public class Packet_Formatting {
         for(byte x: questions("www.work.com", Qtype.typeNS)){
             System.out.println(x);
         }
-        //Format Packet Answer
-        //Format Packet Authority
-        //Format Packet Additional
     }
 
     public static byte[] header(boolean TC_truncate) {
