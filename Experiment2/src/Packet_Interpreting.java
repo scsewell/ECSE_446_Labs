@@ -1,3 +1,5 @@
+import static java.util.Arrays.copyOfRange;
+
 public class Packet_Interpreting {
 
     public static boolean AA;       //1: name server is authority for a domain name in question section
@@ -13,13 +15,17 @@ public class Packet_Interpreting {
         //          or is everything already in Packet answer?
 
         //Check Packet Header
-        check_Header(received_packet);
+        parse_Header(received_packet);
         //Format Packet Answer
+        for (int i=0;i<ANCOUNT; i++){
+            byte[] answer_packet = copyOfRange(received_packet,0,32);
+            parse_Answer(answer_packet);
+        }
         //Format Packet Authority - ignore
         //Format Packet Additional
     }
 
-    public static void check_Header(byte[] response) {
+    public static void parse_Header(byte[] response) {
         //check if it's an answer
         if (!isResponse(response)){
             //TODO: return some kind of error?
@@ -43,6 +49,14 @@ public class Packet_Interpreting {
         //retrieve ARCOUNT
         ARCOUNT = response[11] >> 7 + response[12];
     }
+
+    public static void parse_Answer(byte[] response){
+
+    }
+
+//    public static boolean isCompressed(){
+//
+//    }
 
     public static boolean isResponse(byte[] response){
         return (response[2] >> 7 & 1) == 1;
