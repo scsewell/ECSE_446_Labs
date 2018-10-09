@@ -4,6 +4,9 @@ public class Main
 {
     public static void main(String[] args)
     {
+        for (int i=0; i<args.length;i++){
+            System.out.println(args[i]);
+        }
         Options options = new Options();
         
         Option help = new Option("h", "help", false, "Show details for the command line options.");
@@ -51,6 +54,7 @@ public class Main
 
         String[] mainArgs = cmd.getArgs();
 
+        Packet_Formatting packet = new Packet_Formatting();
         if (mainArgs.length < 2)
         {
             System.out.println("Required arguments are missing!");
