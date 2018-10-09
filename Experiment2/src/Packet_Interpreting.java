@@ -18,7 +18,7 @@ public class Packet_Interpreting {
         parse_Header(received_packet);
         //Format Packet Answer
         for (int i=0;i<ANCOUNT; i++){
-            byte[] answer_packet = copyOfRange(received_packet,0,32);
+            byte[] answer_packet = copyOfRange(received_packet,32, received_packet.length);
             parse_Answer(answer_packet);
         }
         //Format Packet Authority - ignore
@@ -51,12 +51,20 @@ public class Packet_Interpreting {
     }
 
     public static void parse_Answer(byte[] response){
+        if (isCompressed(response)){
 
+        } else {
+
+        }
     }
 
-//    public static boolean isCompressed(){
-//
-//    }
+    //TODO: double check
+    public static boolean isCompressed(byte[] response){
+        if ((response[0] << 7 &1) == 1 && (response[0] << 6 &1) == 1){
+            return true;
+        }
+        return false;
+    }
 
     public static boolean isResponse(byte[] response){
         return (response[2] >> 7 & 1) == 1;
