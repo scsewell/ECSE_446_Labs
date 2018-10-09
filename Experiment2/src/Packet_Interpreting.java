@@ -6,6 +6,7 @@ public class Packet_Interpreting {
     public static String isRecursiveSupported;
     public static String RCODE_message;
     public static int ANCOUNT;
+    public static int ARCOUNT;
 
     public static void main(String[] args, byte[] received_packet) {
         //Question: Should we interpret the packet Header and packet Questions as well?
@@ -34,10 +35,13 @@ public class Packet_Interpreting {
 
         //retrieve RCODE
         int RCODE = response[3] & 0b00001111;
-
+        set_RCODE_message(RCODE);
 
         //retrieve ANCOUNT
+        ANCOUNT = response[6] >> 7 + response[7];
 
+        //retrieve ARCOUNT
+        ARCOUNT = response[11] >> 7 + response[12];
     }
 
     public static boolean isResponse(byte[] response){

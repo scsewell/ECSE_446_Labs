@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd8a98c8-ac6f-4247-b775-901974099f17" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/Packet_Formatting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Packet_Formatting.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Packet_Interpreting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Packet_Interpreting.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -24,24 +25,24 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="classpath" value="1" />
-          <entry key="java" value="8" />
+          <entry key="java" value="9" />
           <entry key="project" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Eclipse" value="2" />
-          <entry key="JAVA" value="8" />
+          <entry key="JAVA" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="6503" />
+          <entry key="java" value="6991" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="6503" />
+          <entry key="JAVA" value="6991" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -49,14 +50,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Packet_Interpreting.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="58" selection-end-column="36" />
+            <state relative-caret-position="714">
+              <caret line="42" column="26" lean-forward="true" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
               <folding>
                 <element signature="e#547#548#0" expanded="true" />
                 <element signature="e#590#591#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Packet_Formatting.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#assign_bytes#0;class#Packet_Formatting#0" />
+                <element signature="method#add_array_to_list#0;class#Packet_Formatting#0" />
               </folding>
             </state>
           </provider>
@@ -98,12 +113,12 @@
       <list>
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Qtype.java" />
-        <option value="$PROJECT_DIR$/src/Packet_Formatting.java" />
         <option value="$PROJECT_DIR$/src/Packet_Interpreting.java" />
+        <option value="$PROJECT_DIR$/src/Packet_Formatting.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="949" />
     <option name="width" value="980" />
     <option name="height" value="1031" />
@@ -136,7 +151,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539106966216" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539108218697" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
@@ -203,10 +218,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="633" y="0" width="653" height="687" extended-state="0" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.5862348" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28097165" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -216,14 +231,14 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49635628" weight="0.30071175" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.767285" visible="true" weight="0.0" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49878544" visible="true" weight="0.37188613" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49959514" weight="0.3291815" />
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49554655" weight="0.3291815" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.23271501" side_tool="true" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50121456" side_tool="true" visible="true" weight="0.37188613" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4979757" weight="0.3291815" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49716598" weight="0.3291815" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -262,26 +277,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Packet_Formatting.java">
+    <entry file="file://$PROJECT_DIR$/src/Packet_Interpreting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="90" column="51" selection-start-line="90" selection-start-column="47" selection-end-line="90" selection-end-column="51" />
+        <state relative-caret-position="714">
+          <caret line="42" column="26" lean-forward="true" selection-start-line="42" selection-start-column="26" selection-end-line="42" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#assign_bytes#0;class#Packet_Formatting#0" />
-            <element signature="method#add_array_to_list#0;class#Packet_Formatting#0" />
-            <element signature="method#convert_to_byte_array#0;class#Packet_Formatting#0" />
+            <element signature="e#547#548#0" expanded="true" />
+            <element signature="e#590#591#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Packet_Interpreting.java">
+    <entry file="file://$PROJECT_DIR$/src/Packet_Formatting.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="58" selection-end-column="36" />
+        <state relative-caret-position="153">
+          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
           <folding>
-            <element signature="e#547#548#0" expanded="true" />
-            <element signature="e#590#591#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#assign_bytes#0;class#Packet_Formatting#0" />
+            <element signature="method#add_array_to_list#0;class#Packet_Formatting#0" />
           </folding>
         </state>
       </provider>

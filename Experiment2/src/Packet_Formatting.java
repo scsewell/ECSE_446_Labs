@@ -6,15 +6,26 @@ import java.util.Random;
 //Responsible for formatting the packet
 public class Packet_Formatting {
 
+    public static byte[] return_result;
+
     public static void main(String[] args) {
         //Format Packet Header
-        System.out.println("header" + header(false));
-        for(byte x: header(false)){
-            System.out.println(x);
-        }
+        byte[] header_section = header(false);
+//        System.out.println("header" + header(false));
+//        for(byte x: header(false)){
+//            System.out.println(x);
+//        }
         //Format Packet Question
-        System.out.println("questions" + questions("www.work.com", Qtype.typeNS));
-        for(byte x: questions("www.work.com", Qtype.typeNS)){
+        byte[] questions_section = questions("www.work.com", Qtype.typeNS);
+//        System.out.println("questions" + questions("www.work.com", Qtype.typeNS));
+//        for(byte x: questions("www.work.com", Qtype.typeNS)){
+//            System.out.println(x);
+//        }
+
+        return_result = new byte[header_section.length + questions_section.length];
+        System.arraycopy(header_section, 0, return_result, 0, header_section.length);
+        System.arraycopy(questions_section, 0, return_result, header_section.length, questions_section.length);
+        for(byte x: return_result){
             System.out.println(x);
         }
     }
