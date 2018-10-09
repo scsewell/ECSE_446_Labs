@@ -10,12 +10,12 @@ public class Socket
     
     private final int m_timeout;
     private final int m_retries;
-    private final int m_queryType;
+    private final Qtype m_queryType;
     private final int m_port;
     private final InetAddress m_address;
     private final String m_domainName;
 
-    public Socket(int timeout, int retries, int queryType, int port, InetAddress address, String domainName)
+    public Socket(int timeout, int retries, Qtype queryType, int port, InetAddress address, String domainName)
     {
         m_timeout = timeout;
         m_retries = retries;
@@ -41,7 +41,7 @@ public class Socket
         }
         
         // create the DNS query packet
-        byte[] sendBuf = new byte[0];
+        byte[] sendBuf = Packet_Formatting.createRequest(m_queryType, m_domainName);
         DatagramPacket sendPacket = new DatagramPacket(sendBuf, sendBuf.length, m_address, m_port);
         
         // attempt to send the DNS query and get a response 
@@ -69,6 +69,7 @@ public class Socket
             {
                 System.out.println(e.toString());
             }
+            tries--;
         }
         
         // close the socket
