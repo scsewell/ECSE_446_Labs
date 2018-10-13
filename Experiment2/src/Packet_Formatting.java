@@ -21,8 +21,10 @@ public class Packet_Formatting
         return_result = new byte[header_section.length + questions_section.length];
         System.arraycopy(header_section, 0, return_result, 0, header_section.length);
         System.arraycopy(questions_section, 0, return_result, header_section.length, questions_section.length);
-        for(byte x: return_result){
-//        }
+//        System.out.println("sent package: ");
+//        for(byte x: return_result){
+//            System.out.println(x);
+//         }
     }
     
     public static byte[] createRequest(Qtype queryType, String domainName)
@@ -33,7 +35,7 @@ public class Packet_Formatting
         return_result = new byte[header_section.length + questions_section.length];
         System.arraycopy(header_section, 0, return_result, 0, header_section.length);
         System.arraycopy(questions_section, 0, return_result, header_section.length, questions_section.length);
-        
+
         return return_result;
     }
     
@@ -45,6 +47,8 @@ public class Packet_Formatting
         byte[] id = new byte[2];
         Random random_num = new Random();
         random_num.nextBytes(id);
+
+
         add_array_to_list(id, result_Byte);
         
         // QR - OPCODE - AA - TC - RD
