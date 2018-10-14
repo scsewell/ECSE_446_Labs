@@ -20,7 +20,7 @@ public class Packet_Interpreting {
         //Format Packet Answer
         for (int i=0;i<ANCOUNT; i++){
             byte[] answer_packet = copyOfRange(received_packet,32, received_packet.length);
-            parse_Answer(answer_packet);
+//            parse_Answer(answer_packet);
         }
         //Format Packet Authority - ignore
         //Format Packet Additional
@@ -30,10 +30,11 @@ public class Packet_Interpreting {
         //Check Packet Header
         full_received_packet = received_packet;
         parse_Header(received_packet);
+        //count Question Section
+        current_answer_pointer = 12 + name_width(12) + 1 + 4;
         //Format Packet Answer
-        current_answer_pointer = 31;
         for (int i=0;i<ANCOUNT; i++){
-            parse_Answer(full_received_packet);
+            parse_Answer();
         }
         //Format Packet Authority - ignore
         //Format Packet Additional
@@ -66,17 +67,96 @@ public class Packet_Interpreting {
         System.out.println(ARCOUNT);
     }
 
-    public static void parse_Answer(byte[] response){
-        System.out.println("parsing answer");
-        StringBuilder domain_name = new StringBuilder();
+    public static void parse_Answer(){
+        String domain_name;
+        String NAME;
         int pointer_count = current_answer_pointer;
+        int TTL;
+        Qtype TYPE;
+        int RDLENGTH;
 
-        while(full_received_packet[pointer_count] != 0){
+        byte byte_0;
+        byte byte_1;
+        byte byte_2;
+        byte byte_3;
+
+        domain_name = get_name_field(pointer_count);
+        pointer_count = current_answer_pointer + name_width(pointer_count);
+
+        //TYPE field
+        byte_0 = full_received_packet[pointer_count];
+        byte_1 = full_received_packet[pointer_count + 1];
+        TYPE = (Qtype.get_type((byte_0 << 8)+ to_unsigned(byte_1)));
+
+        pointer_count = pointer_count + 2;
+
+        //CLASS
+        byte_0 = full_received_packet[pointer_count];
+        byte_1 = full_received_packet[pointer_count +1];
+        if (((byte_0 << 8)+ to_unsigned(byte_1)) != 0x0001){
+            //TODO: print an error
+        }
+
+        pointer_count = pointer_count + 2;
+
+        //TTL
+        byte_0 = full_received_packet[pointer_count];
+        byte_1 = full_received_packet[pointer_count +1];
+        byte_2 = full_received_packet[pointer_count +2];
+        byte_3 = full_received_packet[pointer_count +3];
+        TTL = ((byte_0 << 24) + (byte_1 << 16) + (byte_2 << 8) + to_unsigned(byte_3));
+
+        pointer_count = pointer_count + 4;
+
+        //RDLENGTH
+        byte_0 = full_received_packet[pointer_count];
+        byte_1 = full_received_packet[pointer_count +1];
+        RDLENGTH = (byte_0 << 8)+ to_unsigned(byte_1);
+
+        pointer_count = pointer_count + 2;
+
+        //RDATA
+        if (TYPE == Qtype.typeA){
+            byte_0 = full_received_packet[pointer_count];
+            byte_1 = full_received_packet[pointer_count +1];
+            byte_2 = full_received_packet[pointer_count +2];
+            byte_3 = full_received_packet[pointer_count +3];
+
+            get_ip_address(to_unsigned(byte_0),to_unsigned(byte_1),to_unsigned(byte_2),to_unsigned(byte_3));
+        }
+        if (TYPE == Qtype.typeNS || TYPE == Qtype.typeCNAME){
+            NAME = get_name_field(pointer_count);
+            pointer_count = current_answer_pointer + name_width(pointer_count);
+        }
+        if (TYPE == Qtype.typeMX){
+
+        }
+    }
+
+    public static String get_ip_address(int one, int two, int three, int four){
+        StringBuilder ip_address = new StringBuilder();
+        ip_address.append(one);
+        ip_address.append(".");
+        ip_address.append(two);
+        ip_address.append(".");
+        ip_address.append(three);
+        ip_address.append(".");
+        ip_address.append(four);
+
+        return ip_address.toString();
+    }
+
+    public static String get_name_field(int pointer_count){
+        StringBuilder domain_name = new StringBuilder();
+        byte byte_0;
+        byte byte_1;
+
+        while(pointer_count <= full_received_packet.length && full_received_packet[pointer_count] != 0){
             if (isCompressed(full_received_packet[pointer_count])){
-                byte compressed_byte_1 = full_received_packet[pointer_count];
-                byte compressed_byte_2 = full_received_packet[pointer_count + 1];
-                compressed_byte_1 &= ~(3 << 6);        //invert the 1s
-                pointer_count = (compressed_byte_1 << 8) + compressed_byte_2;        //find the pointed number
+                byte_0 = full_received_packet[pointer_count];
+                byte_1 = full_received_packet[pointer_count + 1];
+                byte_0 &= ~(3 << 6);        //invert the 1s
+                pointer_count = (byte_0 << 8) + byte_1;        //find the pointed number
                 continue;
             }
             int count = full_received_packet[pointer_count];
@@ -86,12 +166,32 @@ public class Packet_Interpreting {
             }
             domain_name.append(".");
             pointer_count = pointer_count + count + 1;
+            //as long as no pointer was used, count + 1 ( 3 w w w  = 3 + 1 )
         }
         domain_name.deleteCharAt(domain_name.length() -1);
-        domain_name.toString();
+        return domain_name.toString();
     }
 
-    //TODO: double check
+    public static int name_width(int pointer_count){
+        int name_bytecount = 0;
+
+        while(pointer_count <= full_received_packet.length && full_received_packet[pointer_count] != 0){
+            if (isCompressed(full_received_packet[pointer_count])){
+                name_bytecount = name_bytecount + 2;
+                break;
+            }
+            int count = full_received_packet[pointer_count];
+            pointer_count = pointer_count + count + 1;
+            //as long as no pointer was used, count + 1 ( 3 w w w  = 3 + 1 )
+            name_bytecount = name_bytecount + count + 1;
+        }
+
+        return name_bytecount;
+    }
+    public static int to_unsigned(byte signed){
+        return (signed & 0xFF);
+    }
+
     public static boolean isCompressed(byte response){
         if (((response >> 6) & 3) == 3){
             return true;
