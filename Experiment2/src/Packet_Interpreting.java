@@ -1,5 +1,7 @@
 import static java.util.Arrays.copyOfRange;
 import java.lang.StringBuilder;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Packet_Interpreting {
 
@@ -31,11 +33,12 @@ public class Packet_Interpreting {
         full_received_packet = received_packet;
         parse_Header(received_packet);
         //count Question Section
-        current_answer_pointer = 12 + name_width(12) + 1 + 4;
+        current_answer_pointer = 12 + name_width(12) + 4;
         //Format Packet Answer
-        for (int i=0;i<ANCOUNT; i++){
-            parse_Answer();
-        }
+//        for (int i=0;i<ANCOUNT; i++){
+//            parse_Answer();
+//        }
+        parse_Answer();
         //Format Packet Authority - ignore
         //Format Packet Additional
     }
@@ -67,7 +70,8 @@ public class Packet_Interpreting {
         System.out.println(ARCOUNT);
     }
 
-    public static void parse_Answer(){
+    public static ArrayList<ArrayList<String>> parse_Answer(){
+        ArrayList<ArrayList<String>> full_answer = new ArrayList<ArrayList<String>>();
         String domain_name;
         String NAME;
         int pointer_count = current_answer_pointer;
@@ -80,57 +84,77 @@ public class Packet_Interpreting {
         byte byte_2;
         byte byte_3;
 
-        domain_name = get_name_field(pointer_count);
-        pointer_count = current_answer_pointer + name_width(pointer_count);
+        for (int i=0;i<ANCOUNT; i++) {
+            ArrayList<String> answer = new ArrayList<>();
+            domain_name = get_name_field(pointer_count);
+            answer.add(domain_name);
+            pointer_count = pointer_count + name_width(pointer_count);
 
-        //TYPE field
-        byte_0 = full_received_packet[pointer_count];
-        byte_1 = full_received_packet[pointer_count + 1];
-        TYPE = (Qtype.get_type((byte_0 << 8)+ to_unsigned(byte_1)));
-
-        pointer_count = pointer_count + 2;
-
-        //CLASS
-        byte_0 = full_received_packet[pointer_count];
-        byte_1 = full_received_packet[pointer_count +1];
-        if (((byte_0 << 8)+ to_unsigned(byte_1)) != 0x0001){
-            //TODO: print an error
-        }
-
-        pointer_count = pointer_count + 2;
-
-        //TTL
-        byte_0 = full_received_packet[pointer_count];
-        byte_1 = full_received_packet[pointer_count +1];
-        byte_2 = full_received_packet[pointer_count +2];
-        byte_3 = full_received_packet[pointer_count +3];
-        TTL = ((byte_0 << 24) + (byte_1 << 16) + (byte_2 << 8) + to_unsigned(byte_3));
-
-        pointer_count = pointer_count + 4;
-
-        //RDLENGTH
-        byte_0 = full_received_packet[pointer_count];
-        byte_1 = full_received_packet[pointer_count +1];
-        RDLENGTH = (byte_0 << 8)+ to_unsigned(byte_1);
-
-        pointer_count = pointer_count + 2;
-
-        //RDATA
-        if (TYPE == Qtype.typeA){
+            //TYPE field
             byte_0 = full_received_packet[pointer_count];
-            byte_1 = full_received_packet[pointer_count +1];
-            byte_2 = full_received_packet[pointer_count +2];
-            byte_3 = full_received_packet[pointer_count +3];
+            byte_1 = full_received_packet[pointer_count + 1];
+            TYPE = (Qtype.get_type((byte_0 << 8) + to_unsigned(byte_1)));
+            answer.add(TYPE.toString());
 
-            get_ip_address(to_unsigned(byte_0),to_unsigned(byte_1),to_unsigned(byte_2),to_unsigned(byte_3));
-        }
-        if (TYPE == Qtype.typeNS || TYPE == Qtype.typeCNAME){
-            NAME = get_name_field(pointer_count);
-            pointer_count = current_answer_pointer + name_width(pointer_count);
-        }
-        if (TYPE == Qtype.typeMX){
+            pointer_count = pointer_count + 2;
 
+            //CLASS
+            byte_0 = full_received_packet[pointer_count];
+            byte_1 = full_received_packet[pointer_count + 1];
+            if (((byte_0 << 8) + to_unsigned(byte_1)) != 0x0001) {
+                //TODO: print an error
+            }
+
+            pointer_count = pointer_count + 2;
+
+            //TTL
+            byte_0 = full_received_packet[pointer_count];
+            byte_1 = full_received_packet[pointer_count + 1];
+            byte_2 = full_received_packet[pointer_count + 2];
+            byte_3 = full_received_packet[pointer_count + 3];
+            TTL = (byte_0 << 24) + (byte_1 << 16) + (byte_2 << 8) + to_unsigned(byte_3);
+            answer.add(String.valueOf(TTL));
+
+            pointer_count = pointer_count + 4;
+
+            //RDLENGTH
+            byte_0 = full_received_packet[pointer_count];
+            byte_1 = full_received_packet[pointer_count + 1];
+            RDLENGTH = (byte_0 << 8) + to_unsigned(byte_1);
+
+            pointer_count = pointer_count + 2;
+
+            //RDATA
+            if (TYPE == Qtype.typeA) {
+                byte_0 = full_received_packet[pointer_count];
+                byte_1 = full_received_packet[pointer_count + 1];
+                byte_2 = full_received_packet[pointer_count + 2];
+                byte_3 = full_received_packet[pointer_count + 3];
+
+                NAME = (get_ip_address(to_unsigned(byte_0), to_unsigned(byte_1), to_unsigned(byte_2), to_unsigned(byte_3)));
+                answer.add(NAME);
+                pointer_count = pointer_count + 4;
+            }
+            if (TYPE == Qtype.typeNS || TYPE == Qtype.typeCNAME) {
+                NAME = (get_name_field(pointer_count));
+                answer.add(NAME);
+                pointer_count = pointer_count + name_width(pointer_count);
+            }
+            if (TYPE == Qtype.typeMX) {
+                byte_0 = full_received_packet[pointer_count];
+                byte_1 = full_received_packet[pointer_count + 1];
+
+                int preference = (byte_0 << 8) + to_unsigned(byte_1);
+
+                answer.add(String.valueOf(preference));
+                pointer_count = pointer_count + 2;
+                NAME = (get_name_field(pointer_count));
+                answer.add(NAME);
+                pointer_count = pointer_count + name_width(pointer_count);
+            }
+            full_answer.add(answer);
         }
+        return full_answer;
     }
 
     public static String get_ip_address(int one, int two, int three, int four){
@@ -174,16 +198,21 @@ public class Packet_Interpreting {
 
     public static int name_width(int pointer_count){
         int name_bytecount = 0;
+        boolean add_0_for_end = true;
 
         while(pointer_count <= full_received_packet.length && full_received_packet[pointer_count] != 0){
             if (isCompressed(full_received_packet[pointer_count])){
                 name_bytecount = name_bytecount + 2;
+                add_0_for_end = false;
                 break;
             }
             int count = full_received_packet[pointer_count];
             pointer_count = pointer_count + count + 1;
             //as long as no pointer was used, count + 1 ( 3 w w w  = 3 + 1 )
             name_bytecount = name_bytecount + count + 1;
+        }
+        if(add_0_for_end){
+            name_bytecount ++;
         }
 
         return name_bytecount;

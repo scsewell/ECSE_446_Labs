@@ -114,7 +114,7 @@ public class DnsClient
         
         // start the socket
         //Socket socket = new Socket(timeout, retries, queryType, port, address, domainName);
-        Socket socket = new Socket(timeout, retries, Qtype.typeNS, port, address, domainName);
+        Socket socket = new Socket(timeout, retries, Qtype.typeMX, port, address, domainName);
         socket.run();
     }
     
