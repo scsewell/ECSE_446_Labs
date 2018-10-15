@@ -44,7 +44,9 @@ public class Socket
         byte[] sendBuf = Packet_Formatting.createRequest(m_queryType, m_domainName);
         DatagramPacket sendPacket = new DatagramPacket(sendBuf, sendBuf.length, m_address, m_port);
         
-        // attempt to send the DNS query and get a response 
+        // attempt to send the DNS query and get a response
+        long startTime = System.nanoTime();
+        long endTime = 0;
         int tries = m_retries;
         while (tries > 0)
         {
@@ -52,11 +54,17 @@ public class Socket
             {
                 // send the query
                 socket.send(sendPacket);
+
+                Logger.query_summary(m_domainName, m_address.getHostAddress(), m_queryType.toString());
                 
                 // get the response
                 byte[] responseBuffer = new byte[MAX_RESPONSE_LENGTH];
                 DatagramPacket packet = new DatagramPacket(responseBuffer, responseBuffer.length);
                 socket.receive(packet);
+
+                endTime = System.nanoTime() - startTime;
+                double seconds_elapsed = (double)endTime / 1000000000.0;
+                Logger.performance(seconds_elapsed,tries);
                 
                 // parse the response
                 String output = new String(packet.getData(), 0, packet.getLength());
@@ -74,7 +82,6 @@ public class Socket
             }
             tries--;
         }
-        
         // close the socket
         socket.close();
     }

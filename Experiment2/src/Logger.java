@@ -6,9 +6,11 @@ public class Logger {
         System.out.println("DnsClient sending request for " + name);
         System.out.println("Server: " + ip);
         System.out.println("Request type: " + type);
+        System.out.println();
     }
-    public void performance(int ttl, int num_retries){
-        System.out.println("Response received after " + Integer.toString(ttl) + "seconds (" + Integer.toString(num_retries) + ")");
+    public static void performance(double ttl, int num_retries){
+        System.out.println("Response received after " + Double.toString(ttl) + " seconds (" + Integer.toString(num_retries) + " retries)");
+        System.out.println();
     }
     public static void answer_section(int num_answer){
         System.out.println("***Answer Section(" + Integer.toString(num_answer) + " records)***" );
@@ -19,10 +21,11 @@ public class Logger {
     public static void MX_format(String alias, int pref, int time, boolean auth){
         System.out.println("MS \t" + alias + "\t" + pref + "\t" + time + "\t" + auth);
     }
-    public void additional_seciont(int num_additional){
+    public static void additional_section(int num_additional){
+        System.out.println();
         System.out.println("***Additional Section(" + Integer.toString(num_additional) + " records)***" );
     }
-    public void no_records(){
+    public static void no_records(){
         System.out.println("NOTFOUND");
     }
 

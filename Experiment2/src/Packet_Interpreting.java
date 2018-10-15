@@ -35,9 +35,9 @@ public class Packet_Interpreting {
         //count Question Section
         current_answer_pointer = 12 + name_width(12) + 4;
         //Format Packet Answer
-        parse_Answer();
-
+        parse_Answer(ANCOUNT, true);
         //Format Packet Additional
+        parse_Answer(ARCOUNT, false);
     }
 
     public static void parse_Header(byte[] response) {
@@ -65,7 +65,7 @@ public class Packet_Interpreting {
         ARCOUNT = (response[10] << 8) + response[11];
     }
 
-    public static ArrayList<ArrayList<String>> parse_Answer(){
+    public static ArrayList<ArrayList<String>> parse_Answer(int count, boolean isAnswer){
         ArrayList<ArrayList<String>> full_answer = new ArrayList<ArrayList<String>>();
         String domain_name;
         String NAME;
@@ -79,8 +79,18 @@ public class Packet_Interpreting {
         byte byte_2;
         byte byte_3;
 
-        Logger.answer_section(ANCOUNT);
-        for (int i=0;i<ANCOUNT; i++) {
+        //is for answer section
+        if (isAnswer){
+            Logger.answer_section(count);
+        } else {    // is for additional section
+            Logger.additional_section(count);
+        }
+
+        // no records found
+        if (count == 0){
+            Logger.no_records();
+        }
+        for (int i=0;i<count; i++) {
             ArrayList<String> answer = new ArrayList<>();
             domain_name = get_name_field(pointer_count);
             answer.add(domain_name);
