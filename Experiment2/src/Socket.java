@@ -60,7 +60,7 @@ public class Socket
                 
                 // parse the response
                 String output = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(output);
+                //System.out.println(output);
                 Packet_Interpreting.interpret_results(packet.getData());
 
                 //System.out.println(output);

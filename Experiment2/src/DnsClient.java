@@ -65,8 +65,8 @@ public class DnsClient
         try
         {
             String[] serverAddr = mainArgs[0].replace("@", "").split("\\.");
-            System.out.println(serverAddr.length);
-            System.out.println(mainArgs[0].replace("@", ""));
+            //System.out.println(serverAddr.length);
+            //System.out.println(mainArgs[0].replace("@", ""));
             byte[] addr = new byte[serverAddr.length];
             for (int i = 0; i < addr.length; i++)
             {
@@ -113,8 +113,8 @@ public class DnsClient
         }
         
         // start the socket
-        //Socket socket = new Socket(timeout, retries, queryType, port, address, domainName);
-        Socket socket = new Socket(timeout, retries, Qtype.typeMX, port, address, domainName);
+        Socket socket = new Socket(timeout, retries, queryType, port, address, domainName);
+        //Socket socket = new Socket(timeout, retries, Qtype.typeMX, port, address, domainName);
         socket.run();
     }
     

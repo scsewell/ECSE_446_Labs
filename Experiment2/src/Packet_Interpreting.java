@@ -8,7 +8,7 @@ public class Packet_Interpreting {
     public static byte[] full_received_packet;
     public static int current_answer_pointer;
 
-    public static boolean AA;       //1: name server is authority for a domain name in question section
+    public static boolean AA;
     public static String error;
     public static boolean isTruncated;
     public static String isRecursiveSupported;
@@ -35,11 +35,8 @@ public class Packet_Interpreting {
         //count Question Section
         current_answer_pointer = 12 + name_width(12) + 4;
         //Format Packet Answer
-//        for (int i=0;i<ANCOUNT; i++){
-//            parse_Answer();
-//        }
         parse_Answer();
-        //Format Packet Authority - ignore
+
         //Format Packet Additional
     }
 
@@ -63,11 +60,9 @@ public class Packet_Interpreting {
 
         //retrieve ANCOUNT
         ANCOUNT = (response[6] << 8 ) + response[7];
-        System.out.println(ANCOUNT);
 
         //retrieve ARCOUNT
         ARCOUNT = (response[10] << 8) + response[11];
-        System.out.println(ARCOUNT);
     }
 
     public static ArrayList<ArrayList<String>> parse_Answer(){
@@ -84,6 +79,7 @@ public class Packet_Interpreting {
         byte byte_2;
         byte byte_3;
 
+        Logger.answer_section(ANCOUNT);
         for (int i=0;i<ANCOUNT; i++) {
             ArrayList<String> answer = new ArrayList<>();
             domain_name = get_name_field(pointer_count);
@@ -133,11 +129,13 @@ public class Packet_Interpreting {
 
                 NAME = (get_ip_address(to_unsigned(byte_0), to_unsigned(byte_1), to_unsigned(byte_2), to_unsigned(byte_3)));
                 answer.add(NAME);
+                Logger.type_format(TYPE.toString(),NAME,TTL,AA);
                 pointer_count = pointer_count + 4;
             }
             if (TYPE == Qtype.typeNS || TYPE == Qtype.typeCNAME) {
                 NAME = (get_name_field(pointer_count));
                 answer.add(NAME);
+                Logger.type_format(TYPE.toString(),NAME,TTL,AA);
                 pointer_count = pointer_count + name_width(pointer_count);
             }
             if (TYPE == Qtype.typeMX) {
@@ -150,6 +148,7 @@ public class Packet_Interpreting {
                 pointer_count = pointer_count + 2;
                 NAME = (get_name_field(pointer_count));
                 answer.add(NAME);
+                Logger.MX_format(NAME,preference,TTL,AA);
                 pointer_count = pointer_count + name_width(pointer_count);
             }
             full_answer.add(answer);
