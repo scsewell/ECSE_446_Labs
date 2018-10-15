@@ -16,10 +16,22 @@ public class Logger {
         System.out.println("***Answer Section(" + Integer.toString(num_answer) + " records)***" );
     }
     public static void type_format(String type, String alias, int time, boolean auth){
-        System.out.println(type + "\t" + alias + "\t" + time + "\t" + auth);
+        String authority = "";
+        if (!auth){
+            authority = "nonauth";
+        } else {
+            authority = "auth";
+        }
+        System.out.println(type + "\t" + alias + "\t" + time + "\t" + authority);
     }
     public static void MX_format(String alias, int pref, int time, boolean auth){
-        System.out.println("MS \t" + alias + "\t" + pref + "\t" + time + "\t" + auth);
+        String authority = "";
+        if (!auth){
+            authority = "nonauth";
+        } else {
+            authority = "auth";
+        }
+        System.out.println("MS \t" + alias + "\t" + pref + "\t" + time + "\t" + authority);
     }
     public static void additional_section(int num_additional){
         System.out.println();
