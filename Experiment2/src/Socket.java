@@ -1,12 +1,11 @@
-import java.io.IOException;
+import java.net.InetAddress;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 
 public class Socket
 {
-    private static final int MAX_RESPONSE_LENGTH = 576;
+    private static final int MAX_RESPONSE_LENGTH = 2048;
     
     private final int m_timeout;
     private final int m_retries;
@@ -31,58 +30,63 @@ public class Socket
         DatagramSocket socket;
         try
         {
-            socket = new DatagramSocket(m_port);
+            socket = new DatagramSocket();
             socket.setSoTimeout(m_timeout * 1000);
         }
         catch (SocketException e)
         {
-            System.out.println(e.toString());
+            Logger.logError(e.toString());
             return;
         }
         
         // create the DNS query packet
-        byte[] sendBuf = Packet_Formatting.createRequest(m_queryType, m_domainName);
-        DatagramPacket sendPacket = new DatagramPacket(sendBuf, sendBuf.length, m_address, m_port);
+        DatagramPacket sendPacket;
+        try
+        {
+            byte[] sendBuf = PacketFormatting.createRequest(m_domainName, m_queryType);
+            sendPacket = new DatagramPacket(sendBuf, sendBuf.length, m_address, m_port);
+        }
+	    catch (Exception e)
+	    {
+	    	socket.close();
+            Logger.logError(e.toString());
+	        return;
+	    }
         
         // attempt to send the DNS query and get a response
         long startTime = System.nanoTime();
-        long endTime = 0;
-        int tries = m_retries;
-        while (tries > 0)
+        int tries = 0;
+        while (tries < m_retries)
         {
             try
             {
                 // send the query
                 socket.send(sendPacket);
 
-                Logger.query_summary(m_domainName, m_address.getHostAddress(), m_queryType.toString());
+                Logger.logQuery(m_domainName, m_address, m_queryType);
                 
                 // get the response
                 byte[] responseBuffer = new byte[MAX_RESPONSE_LENGTH];
                 DatagramPacket packet = new DatagramPacket(responseBuffer, responseBuffer.length);
                 socket.receive(packet);
 
-                endTime = System.nanoTime() - startTime;
-                double seconds_elapsed = (double)endTime / 1000000000.0;
-                Logger.performance(seconds_elapsed,tries);
+                Logger.logPerformance((System.nanoTime() - startTime) / 1000000000.0, tries);
                 
                 // parse the response
-                String output = new String(packet.getData(), 0, packet.getLength());
-                //System.out.println(output);
-                Packet_Interpreting.interpret_results(packet.getData());
-
-                //System.out.println(output);
+                PacketInterpreting.interpretResults(packet.getData());
                 
                 // exit the loop
-                break;
+                socket.close();
+                return;
             }
-            catch (IOException e)
+            catch (Exception e)
             {
-                System.out.println(e.toString());
+                Logger.logError(e.toString());
             }
-            tries--;
+            tries++;
         }
-        // close the socket
+
+        Logger.logError("Maximum number of retries (" + m_retries + ") exceeded.");
         socket.close();
     }
 }

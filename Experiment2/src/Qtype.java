@@ -1,31 +1,28 @@
 public enum Qtype
 {
-    typeA(0x0001), typeNS(0x0002), typeMX(0x000f), typeCNAME(0x0005);
+    A(0x0001), NS(0x0002), MX(0x000F), CNAME(0x0005);
     
-    private byte[] result;
-    private int int_result;
+    private short m_value;
     
-    Qtype(int x)
+    Qtype(int value)
     {
-        result = new byte[2];
-        result[0] = 0;
-        result[1] = (byte)x;
-
-        int_result = x;
+    	m_value = (short)value;
     }
     
-    public byte[] get_value()
+    public short value()
     {
-        return result;
+        return m_value;
     }
-
-    public static Qtype get_type(int x)
+    
+    public static Qtype getValue(short value)
     {
-        for (int i=0; i<Qtype.values().length;i++){
-            if (Qtype.values()[i].int_result == x){
-                return Qtype.values()[i];
+        for (Qtype t : Qtype.values())
+        {
+            if (t.m_value == value)
+            {
+            	return t;
             }
         }
-        return null;
+        throw new IllegalArgumentException("QType unknown for value: " + value);
     }
 }

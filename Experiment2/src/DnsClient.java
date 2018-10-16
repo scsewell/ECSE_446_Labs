@@ -43,7 +43,7 @@ public class DnsClient
         }
         catch (ParseException e)
         {
-            System.out.println(e.getMessage());
+        	Logger.logError(e.getMessage());
             printHelp(options);
         }
         
@@ -57,7 +57,7 @@ public class DnsClient
         String[] mainArgs = cmd.getArgs();
         if (mainArgs.length < 2)
         {
-            System.out.println("Required arguments are missing!");
+        	Logger.logError("Required arguments are missing!");
             printHelp(options);
         }
         
@@ -65,8 +65,6 @@ public class DnsClient
         try
         {
             String[] serverAddr = mainArgs[0].replace("@", "").split("\\.");
-            //System.out.println(serverAddr.length);
-            //System.out.println(mainArgs[0].replace("@", ""));
             byte[] addr = new byte[serverAddr.length];
             for (int i = 0; i < addr.length; i++)
             {
@@ -76,8 +74,7 @@ public class DnsClient
         }
         catch (Exception e)
         {
-            System.out.println("Invalid server address provided!");
-            System.out.println(e.toString());
+        	Logger.logError("Invalid server address provided: " + e.toString());
             printHelp(options);
         }
         
@@ -102,19 +99,18 @@ public class DnsClient
             port = Integer.parseInt(cmd.getOptionValue(portOption.getArgName()));
         }
         
-        Qtype queryType = Qtype.typeA;
+        Qtype queryType = Qtype.A;
         if (cmd.hasOption(mailServerOption.getArgName()))
         {
-            queryType = Qtype.typeMX;
+            queryType = Qtype.MX;
         }
         else if (cmd.hasOption(nameServerOption.getArgName()))
         {
-            queryType = Qtype.typeNS;
+            queryType = Qtype.NS;
         }
         
         // start the socket
         Socket socket = new Socket(timeout, retries, queryType, port, address, domainName);
-        //Socket socket = new Socket(timeout, retries, Qtype.typeMX, port, address, domainName);
         socket.run();
     }
     

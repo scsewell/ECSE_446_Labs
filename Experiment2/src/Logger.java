@@ -1,44 +1,51 @@
-public class Logger {
-    public static void main (String [] args){
+import java.net.InetAddress;
 
-    }
-    public static void query_summary(String name, String ip, String type){
-        System.out.println("DnsClient sending request for " + name);
-        System.out.println("Server: " + ip);
-        System.out.println("Request type: " + type);
-        System.out.println();
-    }
-    public static void performance(double ttl, int num_retries){
-        System.out.println("Response received after " + Double.toString(ttl) + " seconds (" + Integer.toString(num_retries) + " retries)");
-        System.out.println();
-    }
-    public static void answer_section(int num_answer){
-        System.out.println("***Answer Section(" + Integer.toString(num_answer) + " records)***" );
-    }
-    public static void type_format(String type, String alias, int time, boolean auth){
-        String authority = "";
-        if (!auth){
-            authority = "nonauth";
-        } else {
-            authority = "auth";
-        }
-        System.out.println(type + "\t" + alias + "\t" + time + "\t" + authority);
-    }
-    public static void MX_format(String alias, int pref, int time, boolean auth){
-        String authority = "";
-        if (!auth){
-            authority = "nonauth";
-        } else {
-            authority = "auth";
-        }
-        System.out.println("MS \t" + alias + "\t" + pref + "\t" + time + "\t" + authority);
-    }
-    public static void additional_section(int num_additional){
-        System.out.println();
-        System.out.println("***Additional Section(" + Integer.toString(num_additional) + " records)***" );
-    }
-    public static void no_records(){
-        System.out.println("NOTFOUND");
-    }
+public class Logger 
+{
+	public static void logError(String message)
+	{
+		System.out.println("Error \t" + message);
+	}
+	
+	public static void logQuery(String name, InetAddress ip, Qtype type)
+	{
+		System.out.println("DnsClient sending request for " + name);
+		System.out.println("Server: " + ip.getHostAddress());
+		System.out.println("Request type: " + type);
+		System.out.println();
+	}
 
+	public static void logPerformance(double duration, int numRetries)
+	{
+		System.out.println("Response received after " + Double.toString(duration) + " seconds (" + Integer.toString(numRetries) + " retries)");
+		System.out.println();
+	}
+
+	public static void logAnswerSection(int numAnswer)
+	{
+		System.out.println("***Answer Section (" + Integer.toString(numAnswer) + " records)***");
+	}
+
+	public static void logAnswer(Qtype type, String alias, int time, boolean auth)
+	{
+		String authority = auth ? "auth" : "nonauth";
+		System.out.println(type + "\t" + alias + "\t" + time + "\t" + authority);
+	}
+
+	public static void logMX(String alias, int pref, int time, boolean auth)
+	{
+		String authority = auth ? "auth" : "nonauth";
+		System.out.println("MS \t" + alias + "\t" + pref + "\t" + time + "\t" + authority);
+	}
+
+	public static void logAdditionalSection(int num_additional)
+	{
+		System.out.println();
+		System.out.println("***Additional Section (" + Integer.toString(num_additional) + " records)***");
+	}
+
+	public static void logNoRecords()
+	{
+		System.out.println("NOTFOUND");
+	}
 }
