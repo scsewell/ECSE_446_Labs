@@ -52,6 +52,7 @@ public class PacketInterpreting
 			case 2:
 	        	throw new Exception("Server failure, the name server was unable to process this query!");
 			case 3:
+                Logger.logNoRecords();
 				Logger.logError("Name error, the domain name referenced in the query does not exist!");
 			case 4:
 	        	throw new Exception("Not implemented, the name server does not support the requested kind of query!");
