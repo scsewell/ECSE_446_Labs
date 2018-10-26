@@ -1,70 +1,20 @@
 import java.net.InetAddress;
-import org.apache.commons.cli.*;
 
 public class DnsClient
 {
     public static void main(String[] args)
     {
-        // specify command line options
-        Options options = new Options();
-        
-        Option helpOption = new Option("h", "help", false, "Show details for the command line options.");
-        Option timeoutOption = new Option("t", "timeout", true, "How long to wait, in seconds, before retransmitting an unanswered query. Default value is 5.");        
-        Option retriesOption = new Option("r", "max-retries", true, "The maximum number of times to retransmit an unanswered query before giving up. Default value is 3.");
-        Option portOption = new Option("p", "port", true, "The UDP port number of the DNS server. Default value is 5.");
-        
-        helpOption.setRequired(false);
-        timeoutOption.setRequired(false);
-        retriesOption.setRequired(false);
-        portOption.setRequired(false);
-        
-        options.addOption(helpOption);
-        options.addOption(timeoutOption);
-        options.addOption(retriesOption);
-        options.addOption(portOption);
-        
-        OptionGroup queryTypeOption = new OptionGroup();
-        Option mailServerOption = new Option("mx", "mail-server", false, "Send a mail server query.");
-        Option nameServerOption = new Option("ns", "name-server", false, "Send a name server query.");
-
-        queryTypeOption.setRequired(false);
-        mailServerOption.setRequired(false);
-        nameServerOption.setRequired(false);
-        
-        queryTypeOption.addOption(nameServerOption);
-        queryTypeOption.addOption(mailServerOption);
-        options.addOptionGroup(queryTypeOption);
-        
-        // read the provided options
-        CommandLine cmd = null;
-        try
-        {
-            cmd = new DefaultParser().parse(options, args);
-        }
-        catch (ParseException e)
-        {
-        	Logger.logError(e.getMessage());
-            printHelp(options);
-        }
-        
         // show the help if requested
-        if (cmd.hasOption("h"))
+        if (hasArg(args, "-h"))
         {
-            printHelp(options);
+            printHelp();
         }
 
         // get the required arguments
-        String[] mainArgs = cmd.getArgs();
-        if (mainArgs.length < 2)
-        {
-        	Logger.logError("Required arguments are missing!");
-            printHelp(options);
-        }
-        
         InetAddress address = null;
         try
         {
-            String[] serverAddr = mainArgs[0].replace("@", "").split("\\.");
+            String[] serverAddr = args[args.length - 2].replace("@", "").split("\\.");
             byte[] addr = new byte[serverAddr.length];
             for (int i = 0; i < addr.length; i++)
             {
@@ -75,36 +25,22 @@ public class DnsClient
         catch (Exception e)
         {
         	Logger.logError("Invalid server address provided: " + e.toString());
-            printHelp(options);
+            printHelp();
         }
         
-        String domainName = mainArgs[1];
+        String domainName = args[args.length - 1];
         
         // get the optional arguments
-        int timeout = 5;
-        if (cmd.hasOption(timeoutOption.getArgName()))
-        {
-            timeout = Integer.parseInt(cmd.getOptionValue(timeoutOption.getArgName()));
-        }
-
-        int retries = 3;
-        if (cmd.hasOption(retriesOption.getArgName()))
-        {
-            retries = Integer.parseInt(cmd.getOptionValue(retriesOption.getArgName()));
-        }
-
-        int port = 53;
-        if (cmd.hasOption(portOption.getArgName()))
-        {
-            port = Integer.parseInt(cmd.getOptionValue(portOption.getArgName()));
-        }
+        int timeout = getArgValue(args, "-t", 5, 0, 1000);
+        int retries = getArgValue(args, "-r", 3, 0, 1000);
+        int port = getArgValue(args, "-p", 53, 0, 65535);
         
         Qtype queryType = Qtype.A;
-        if (cmd.hasOption(mailServerOption.getArgName()))
+        if (hasArg(args, "-mx"))
         {
             queryType = Qtype.MX;
         }
-        else if (cmd.hasOption(nameServerOption.getArgName()))
+        else if (hasArg(args, "-ns"))
         {
             queryType = Qtype.NS;
         }
@@ -114,11 +50,49 @@ public class DnsClient
         socket.run();
     }
     
-    private static void printHelp(Options options)
+    private static void printHelp()
     {
-        new HelpFormatter().printHelp("DnsClient [-t timeout][-r retries][-p port][-mx|-ns] @server name", options);
-        System.out.println("server: The IPv4 address of the DNS server, in a.b.c.d format. Starts with a @ symbol.");
-        System.out.println("name: The domain name to query for.");
+        System.out.println();
+        System.out.println("DnsClient [-t timeout][-r retries][-p port][-mx|-ns] @server name");
+        System.out.println("-h,   help:          Show this help.");
+        System.out.println("-t,   timeout:       How long to wait, in seconds, before retransmitting an unanswered query. Default value is 5.");
+        System.out.println("-r,   retries:       The maximum number of times to retransmit an unanswered query before giving up. Default value is 3.");
+        System.out.println("-p,   port:          The UDP port number of the DNS server. Default value is 5.");
+        System.out.println("-mx,  mail-server:   Send a mail server query.");
+        System.out.println("-ns,  name-server:   Send a name server query.");
+        System.out.println("server:              The IPv4 address of the DNS server, in a.b.c.d format. Starts with a @ symbol.");
+        System.out.println("name:                The domain name to query for.");
+        System.out.println();
         System.exit(1);
+    }
+    
+    private static boolean hasArg(String[] args, String flag)
+    {
+    	for (String arg : args)
+    	{
+    		if (arg.equals(flag)) 
+    		{
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    private static int getArgValue(String[] args, String flag, int defaultValue, int minValue, int maxValue)
+    {
+    	for (int i = 0; i < args.length; i++)
+    	{
+			if (args[i].equals(flag) && (i + 1) < args.length)
+			{
+				int value = Integer.parseInt(args[i + 1]);
+				if (value < minValue || value < maxValue)
+				{
+					return value;
+				}
+		        Logger.logError("Value for flag \"" + flag + "\" is not in the range of valid inputs [" + minValue + ", " + maxValue +"]!");
+		        System.exit(1);
+			}
+		}
+    	return defaultValue;
     }
 }
